@@ -1,10 +1,100 @@
+@font-face {
+    font-family: 'indie_flowerregular';
+    src: url('fonts/indieflower-regular-webfont.woff2') format('woff2'),
+         url('fonts/indieflower-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+html{
+    font-size: 62.5%;
+    font-family: 'indie_flowerregular';
+}
 #game-board{
     display: none;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
-    height: 50vh;
-    width: 50vw;
+    width: 30rem;
+    height: 30rem;
+    justify-self: center;
 }
 .cells{
-    border: 2px solid black;
+    font-size: 5.0rem;
+    text-align: center;
+    align-content: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+.cells:hover{
+    background-color: rgba(141, 119, 119, 30%);
+}
+#game-board div[data-row="0"], #game-board div[data-row="1"]{
+    border-bottom: 2px solid black;
+}
+#game-board div[data-column="0"], #game-board div[data-column="1"]{
+    border-right: 2px solid black;
+}
+body{
+    display: grid;
+    grid-template-rows: 1fr 3fr;
+    grid-template-columns: 1fr;
+    font-size: 1.6rem;
+    gap: 20px;
+}
+form{
+    display: grid;
+    justify-content: center;
+    gap: 10px;
+    width: 70vw;
+    padding: 10px;
+    justify-self: center;
+}
+form div{
+    display: grid;
+    align-content: center;
+    grid-template-rows: 1fr 1fr;
+    justify-content: center;
+}
+form div label{
+    text-align: center;
+}
+header{
+    width: 100%;
+    border-bottom: 1px solid black;
+    box-shadow: 1px 1px;
+    font-size: 2.0rem;
+    font-weight: bold;
+    align-content: center;
+    text-align: center;
+}
+dialog{
+    justify-self: center;
+    align-self: center;
+    font-size: 2.0rem;
+    border: none;
+    background-color: rgb(255 255 255 / 30%);
+    backdrop-filter: blur(10px);
+    height: 100vh;
+    width: 100vw;
+    align-content: center;
+    text-align: center;
+}
+button{
+    border-radius: 3rem;
+    cursor: pointer;
+    background-color: rgb(255 255 255);
+    box-shadow: 2px 2px;
+    padding: 10px;
+}
+button:hover{
+    background-color: antiquewhite;
+}
+input{
+    background-color: antiquewhite;
+    border-radius: 3rem;
+    box-shadow: 2px 2px;
+}
+input:focus{
+    outline: none;
 }
