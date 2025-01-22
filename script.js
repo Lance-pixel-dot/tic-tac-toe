@@ -19,6 +19,9 @@ const gameFunction = (() => {
     const getPlayerOneName = document.querySelector('#player-one-name');
     const getPlayerTwoName = document.querySelector('#player-two-name');
     const gameBoardDiv = document.querySelector('#game-board');
+    const displayPlayerOne = document.querySelector('.player-one-name');
+    const displayPlayerTwo = document.querySelector('.player-two-name');
+    const nameDisplayContainer = document.querySelector('.display-name');
 
     const createPlayer = (name, marker) => {
         return{ name, marker };
@@ -44,6 +47,10 @@ const gameFunction = (() => {
       playerTwoName = playerTwo.name;
       playerTwoMarker = playerTwo.marker;
 
+      displayPlayerOne.textContent = playerOne.name;
+      displayPlayerTwo.textContent = playerTwo.name;
+
+      nameDisplayContainer.style.display = 'flex';
       gameBoardDiv.style.display = 'grid';
       playerForm.style.display = 'none';
      }
