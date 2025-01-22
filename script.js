@@ -1,4 +1,4 @@
-const startGame = ((playerOneMarker, playerTwoMarker, playerOneName, playerTwoName) => {
+const gameFunction = (() => {
     const rows = 3;
     const columns = 3;
     const gameBoard = [];
@@ -10,130 +10,153 @@ const startGame = ((playerOneMarker, playerTwoMarker, playerOneName, playerTwoNa
         }
     }
 
-    console.log(gameBoard);
+    const cells = document.querySelectorAll('.cells');
+    const dialog = document.querySelector('dialog');
+    const winner = document.querySelector('.winner');
+    const restart = document.querySelector('.restart');
+    const playerForm = document.querySelector('form');
+    const formSub = document.querySelector('.submit-players');
+    const getPlayerOneName = document.querySelector('#player-one-name');
+    const getPlayerTwoName = document.querySelector('#player-two-name');
+    const gameBoardDiv = document.querySelector('#game-board');
 
-    let keepRunning = true;
+    const createPlayer = (name, marker) => {
+        return{ name, marker };
+    };
 
- gamePlayActionOne();
+    playerForm.addEventListener('submit', e => {
+        e.preventDefault();
+    })
 
-function gamePlayActionOne(){
-
-    const playerOneRow = prompt('PLayer 1 enter the row where you want to place your Marker');
-    const playerOneColumn = prompt('Player 1 enter the column where you want to place your Marker');
-
-    gameBoard[playerOneRow][playerOneColumn] = playerOneMarker;
-
-    winConditionChecker();
-
-}
-function gamePlayActionTwo(){
-    
-    const playerTwoRow = prompt('Player 2 enter the row where you want to place your Marker');
-    const playerTwoColumn = prompt('Player 2 enter the column where you want to place your Marker');
-
-    gameBoard[playerTwoRow][playerTwoColumn] = playerTwoMarker;
-
-    winConditionChecker();
-
-}
-    console.log(gameBoard);
-    
-function winConditionChecker(){
-    if(
-        //player one winning conditions
-        gameBoard[0][0] == playerOneMarker && gameBoard[0][1] == playerOneMarker && gameBoard[0][2] == playerOneMarker ||
-        gameBoard[1][0] == playerOneMarker && gameBoard[1][1] == playerOneMarker && gameBoard[1][2] == playerOneMarker ||
-        gameBoard[2][0] == playerOneMarker && gameBoard[2][1] == playerOneMarker && gameBoard[2][2] == playerOneMarker ||
-        gameBoard[0][0] == playerOneMarker && gameBoard[1][1] == playerOneMarker && gameBoard[2][2] == playerOneMarker ||
-        gameBoard[0][2] == playerOneMarker && gameBoard[1][1] == playerOneMarker && gameBoard[2][0] == playerOneMarker
-    ){
-        keepRunning = false;
-        console.log(keepRunning);
-        console.log(`${playerOneName} Wins!`);
-        return;
-    }else if(
-        //player two winning conditions 
-        gameBoard[0][0] == playerTwoMarker && gameBoard[0][1] == playerTwoMarker && gameBoard[0][2] == playerTwoMarker ||
-        gameBoard[1][0] == playerTwoMarker && gameBoard[1][1] == playerTwoMarker && gameBoard[1][2] == playerTwoMarker ||
-        gameBoard[2][0] == playerTwoMarker && gameBoard[2][1] == playerTwoMarker && gameBoard[2][2] == playerTwoMarker ||
-        gameBoard[0][0] == playerTwoMarker && gameBoard[1][1] == playerTwoMarker && gameBoard[2][2] == playerTwoMarker ||
-        gameBoard[0][2] == playerTwoMarker && gameBoard[1][1] == playerTwoMarker && gameBoard[2][0] == playerTwoMarker 
-    ){
-        keepRunning = false;
-        console.log(keepRunning);
-        console.log(`${playerTwoName} Wins!`);
-        return;
-    }else if(
-        //draw condition
-        gameBoard[0][0] != '' && gameBoard[0][1] != '' && gameBoard[0][2] != '' &&
-        gameBoard[1][0] != '' && gameBoard[1][1] != '' && gameBoard[1][2] != '' &&
-        gameBoard[2][0] != '' && gameBoard[2][1] != '' && gameBoard[2][2] != '' &&
-        gameBoard[0][0] != '' && gameBoard[1][1] != '' && gameBoard[2][2] != '' &&
-        gameBoard[0][2] != '' && gameBoard[1][1] != '' && gameBoard[2][0] != ''
-    ){
-         keepRunning = false;
-         console.log(keepRunning);
-         console.log('Draw!');
-         return;
-    }else if(keepRunning == true){
-        keepRunning = 'stop';
-        gamePlayActionTwo();
-    }else if(keepRunning === 'stop'){
-        keepRunning = true;
-        gamePlayActionOne();
-    }
-}
-
-});
-
-
-const createPlayer = (name, marker) => {
-    return{ name, marker };
-}
-
-
-const getPlayer = (() => {
-
-    let playerOneName = prompt('What\'s Player 1 name?');
-    let playerOneMarker = prompt('What\'s Player 1 Marker?', 'X or O');
-
+    let playerOneName;
+    let playerOneMarker;
     let playerTwoName;
     let playerTwoMarker;
 
-    playerOneMarker = playerOneMarker.toUpperCase();
+    formSub.addEventListener('click', () => {
 
-    if(playerOneMarker != 'X' && playerOneMarker != 'O'){
+     if(getPlayerOneName.value != '' && getPlayerTwoName.value != ''){
+      const playerOne = createPlayer(getPlayerOneName.value, 'X');
+      const playerTwo = createPlayer(getPlayerTwoName.value, 'O');
 
-        alert('You can only choose between \'X\' or \'O\'');
+      playerOneName = playerOne.name;
+      playerOneMarker = playerOne.marker;
+      playerTwoName = playerTwo.name;
+      playerTwoMarker = playerTwo.marker;
 
-    }else if(playerOneMarker == 'X'){
+      gameBoardDiv.style.display = 'grid';
+      playerForm.style.display = 'none';
+     }
 
-        alert('Then player 2 Marker will be \'O\'');
-        playerTwoName = prompt('And what\'s Player 2 name?');
-        playerTwoMarker = 'O';
+    })
 
-        const playerOne = createPlayer(playerOneName, playerOneMarker);
-        const playerTwo = createPlayer(playerTwoName, playerTwoMarker);
-    
-        console.log(playerOne);
-        console.log(playerTwo);
-    
-        startGame(playerOneMarker, playerTwoMarker, playerOneName, playerTwoName);
+    let keepRunning = true;
+    let indexRow;
+    let indexColumn;
 
-    }else if(playerOneMarker == 'O'){
+    cells.forEach(e => e.addEventListener('click', () => {
 
-        alert('Then player 2 Marker will be \'X\'');
-        playerTwoName = prompt('And what\'s Player 2 name?');
-        playerTwoMarker = 'X';
+        indexRow = e.getAttribute('data-row');
+        indexColumn = e.getAttribute('data-column');        
 
-        const playerOne = createPlayer(playerOneName, playerOneMarker);
-        const playerTwo = createPlayer(playerTwoName, playerTwoMarker);
-    
-        console.log(playerOne);
-        console.log(playerTwo);
+        if(e.textContent === '' && keepRunning === true){
+            e.textContent = playerOneMarker;
+            keepRunning = 'stop';
+            gamePlayActionOne();
+        }else if(keepRunning === 'stop' && e.textContent === ''){
+            e.textContent = playerTwoMarker;
+            keepRunning = true;
+            gamePlayActionTwo();
+        }
 
-        startGame(playerOneMarker, playerTwoMarker, playerOneName, playerTwoName);
+        restart.addEventListener('click', () => {
+            e.textContent = '';
+            for(let i = 0; i < rows; i++){
+                gameBoard[i] = [];
+                for(let j = 0; j < columns; j++){
+                    gameBoard[i][j] = '';
+                }
+            }        
+            dialog.close();
+        })
+
+    }))
+
+    function gamePlayActionOne(){
+
+        let playerOneRow = indexRow;
+        let playerOneColumn = indexColumn;
+
+        gameBoard[playerOneRow][playerOneColumn] = playerOneMarker;
+
+        winConditionChecker();
+
+    }
+    function gamePlayActionTwo(){
+
+        let playerTwoRow = indexRow;
+        let playerTwoColumn = indexColumn;
+
+        gameBoard[playerTwoRow][playerTwoColumn] = playerTwoMarker;
+
+        winConditionChecker();
 
     }
     
+    function winConditionChecker(){
+        if(
+            //player one winning conditions
+            //rows
+            gameBoard[0][0] == playerOneMarker && gameBoard[0][1] == playerOneMarker && gameBoard[0][2] == playerOneMarker ||
+            gameBoard[1][0] == playerOneMarker && gameBoard[1][1] == playerOneMarker && gameBoard[1][2] == playerOneMarker ||
+            gameBoard[2][0] == playerOneMarker && gameBoard[2][1] == playerOneMarker && gameBoard[2][2] == playerOneMarker ||
+            //columns
+            gameBoard[0][0] == playerOneMarker && gameBoard[1][0] == playerOneMarker && gameBoard[2][0] == playerOneMarker ||
+            gameBoard[0][1] == playerOneMarker && gameBoard[1][1] == playerOneMarker && gameBoard[2][1] == playerOneMarker ||
+            gameBoard[0][2] == playerOneMarker && gameBoard[1][2] == playerOneMarker && gameBoard[2][2] == playerOneMarker ||
+            //diagonal
+            gameBoard[0][0] == playerOneMarker && gameBoard[1][1] == playerOneMarker && gameBoard[2][2] == playerOneMarker ||
+            gameBoard[0][2] == playerOneMarker && gameBoard[1][1] == playerOneMarker && gameBoard[2][0] == playerOneMarker
+        ){
+
+            keepRunning = true;
+            dialog.showModal();
+            winner.textContent = `${playerOneName} Wins!`;
+            return;
+
+        }else if(
+            //player two winning conditions
+            //rows
+            gameBoard[0][0] == playerTwoMarker && gameBoard[0][1] == playerTwoMarker && gameBoard[0][2] == playerTwoMarker ||
+            gameBoard[1][0] == playerTwoMarker && gameBoard[1][1] == playerTwoMarker && gameBoard[1][2] == playerTwoMarker ||
+            gameBoard[2][0] == playerTwoMarker && gameBoard[2][1] == playerTwoMarker && gameBoard[2][2] == playerTwoMarker ||
+            //columns
+            gameBoard[0][0] == playerTwoMarker && gameBoard[1][0] == playerTwoMarker && gameBoard[2][0] == playerTwoMarker ||
+            gameBoard[0][1] == playerTwoMarker && gameBoard[1][1] == playerTwoMarker && gameBoard[2][1] == playerTwoMarker ||
+            gameBoard[0][2] == playerTwoMarker && gameBoard[1][2] == playerTwoMarker && gameBoard[2][2] == playerTwoMarker ||
+            //diagonal
+            gameBoard[0][0] == playerTwoMarker && gameBoard[1][1] == playerTwoMarker && gameBoard[2][2] == playerTwoMarker ||
+            gameBoard[0][2] == playerTwoMarker && gameBoard[1][1] == playerTwoMarker && gameBoard[2][0] == playerTwoMarker 
+        ){
+
+            keepRunning = true;
+            dialog.showModal();
+            winner.textContent = `${playerTwoName} Wins!`;
+            return;
+
+        }else if(
+            //draw condition
+            gameBoard[0][0] != '' && gameBoard[0][1] != '' && gameBoard[0][2] != '' &&
+            gameBoard[1][0] != '' && gameBoard[1][1] != '' && gameBoard[1][2] != '' &&
+            gameBoard[2][0] != '' && gameBoard[2][1] != '' && gameBoard[2][2] != ''
+        ){
+
+            keepRunning = true;
+            dialog.showModal();
+            winner.textContent = 'Draw!';
+            return;
+
+        }
+    }
+
 })();
